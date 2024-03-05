@@ -12,20 +12,26 @@ class GamePage extends StatefulWidget{
 
 class _GamePage extends State<GamePage>{
 
+  late FocusNode focusNode;
   final _formKey = GlobalKey<FormState>();
-
+  // The number and its prime divisors
   int n = 2;
   Map<int, int>primeDivisors = {2: 1};
+  // Whether the input value is accepted
+  bool? accepted;
+  Color underlineColor = Colors.black;
 
+  // Get next random number
   void randomNumber(){
     setState(() {
-      n = Random().nextInt(300) + 2;
+      n = Random().nextInt(298) + 2;
       primeDivisors = getPrimeDivisor(n);
     });
     print(n);
     print(primeDivisors.toString());
   }
 
+  // Do division to current number
   void division(int v){
     setState(() {
       n ~/= v;
@@ -34,6 +40,37 @@ class _GamePage extends State<GamePage>{
     primeDivisors[v] = primeDivisors[v]! - 1;
     print(n);
     print(primeDivisors.toString());
+  }
+
+  void onDivisorSubmitted(){
+    if (_formKey.currentState!.validate()) {
+      setState(() {
+        accepted = true;
+      });
+    } else{
+      setState(() {
+        accepted = false;
+      });
+    }
+    if (n == 1) {
+      randomNumber();
+    }
+    focusNode.requestFocus();
+    setState(() {
+      underlineColor = (accepted == null ? Colors.white : accepted! ? Colors.green : Colors.red);
+    });
+  }
+
+ @override
+ void initState(){
+    focusNode = FocusNode();
+    super.initState();
+ }
+
+  @override
+  void dispose() {
+    focusNode.dispose();
+    super.dispose();
   }
 
   @override
@@ -86,33 +123,36 @@ class _GamePage extends State<GamePage>{
                     SizedBox(
                       width: 300,
                       child: TextFormField(
+                        autofocus: true,
+                        focusNode: focusNode,
+                        decoration: InputDecoration(
+                          focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: underlineColor)),
+                          enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: underlineColor)),
+                          border: UnderlineInputBorder(borderSide: BorderSide(color: underlineColor)),
+                        ),
                         validator: (value) {
-                          if(value == null){
+                          if(isPrime(n) && (value == null || value.isEmpty || int.tryParse(value) == 0)) {
+                            division(n);
+                            return null;
+                          } else if(value == null){
                             return "Please enter a number";
                           }
                           int? v = int.tryParse(value);
                           if(v == null || v <= 1){
                             return "Please enter a natural number greater than 1";
-                          }
-                          if(n % v != 0 || !isPrime(v)){
+                          } else if (n % v != 0 || !isPrime(v)){
                             return "Not a prime divisor of current number";
                           }
                           division(v);
                           return null;
                         },
+                        onFieldSubmitted: (value) {
+                          onDivisorSubmitted();
+                        }
                       ),
                     ),
                     ElevatedButton(
-                      onPressed: () {
-                        if(_formKey.currentState!.validate()){
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Good job!')),
-                          );
-                        }
-                        if(n == 1){
-                          randomNumber();
-                        }
-                      },
+                      onPressed: onDivisorSubmitted,
                       child: const Text("Factorize!")
                     )
                   ],
