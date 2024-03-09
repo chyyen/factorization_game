@@ -1,16 +1,14 @@
 # factorization_game
 
-A new Flutter project.
+A game that trains your prime factorization (?)
 
-## Getting Started
+## How to play
 
-This project is a starting point for a Flutter application.
+Player can choose the difficulty of the game (from $2$ to $10^n$), and factorize 10 random number from the chosen range.
 
-A few resources to get you started if this is your first Flutter project:
+## Progress
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- [x] Main function of factorization
+- [ ] Choose difficulty
+- [ ] In-game timing 
+- [ ] Make it prettier
