@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'factorization.dart';
 
 class GamePage extends StatefulWidget{
-  const GamePage({super.key});
+  const GamePage({super.key, required this.difficulty});
+
+  final int difficulty;
 
   @override
   _GamePage createState() => _GamePage();
@@ -24,7 +26,7 @@ class _GamePage extends State<GamePage>{
   // Get next random number
   void randomNumber(){
     setState(() {
-      n = Random().nextInt(298) + 2;
+      n = Random().nextInt((pow(10, widget.difficulty) - 2).toInt()) + 2;
       primeDivisors = getPrimeDivisor(n);
     });
     print(n);

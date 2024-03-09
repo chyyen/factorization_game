@@ -9,6 +9,6 @@ Player can choose the difficulty of the game (from $2$ to $10^n$), and factorize
 ## Progress
 
 - [x] Main function of factorization
-- [ ] Choose difficulty
+- [x] Choose difficulty
 - [ ] In-game timing 
 - [ ] Make it prettier
